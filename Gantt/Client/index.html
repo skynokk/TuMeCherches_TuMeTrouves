@@ -3,13 +3,24 @@
     <title>Gantt</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>Gantt</h1>
-    <ul id="gantt_desc"></ul>
-    <br>
-    <ul id="gantt_task"></ul>
+    <ul id="gantt_desc"></ul><br>
+    <ul id="gantt_task"></ul><br>
+    <h2>Ajout d'une tâche</h2><br>
+    <form id="addTask" action="">
+      <p class="form">Name : </p><input type="text" id="name" autocomplete="off" /><br>
+      <p class="form">Description : </p><input type="text" id="desc" autocomplete="off" /><br>
+      <p class="form">Début : </p><input type="number" id="start" autocomplete="off" /><br>
+      <p class="form">Fin : </p><input type="number" id="end" autocomplete="off" /><br>
+      <p class="form">Progression : </p><input type="number" id="percentageProgress" autocomplete="off" /><br>
+      <p class="form">Couleur : </p><input type="text" id="color" autocomplete="off" /><br>
+      <p class="form">Tâches liées : </p><input type="text" id="linkedTask" autocomplete="off" /><br>
+      <p class="form">Ressources : </p><input type="text" id="ressources" autocomplete="off" /><br>
+      <button>Envoyer</button>
+    </form>
   </body>
   <script src="/gantt.js">
   </script>
