@@ -22,8 +22,6 @@ groupTask : [{ name : "Back", start : Date.now(), end : Date.now() }],
 resources : [{ name : "Valentin", cost : 10, type : "humain" }], 
 milestones : [{ name : "Jalon1", date : Date.now() }] };
 
-let count = dbo.collection("TuMeCherches_TuMeTrouves").find({}).count();
-
 io.on("connection", client => {
   client.on("connection", data => console.log(data));
   client.on("disconnect", function() {
@@ -33,6 +31,7 @@ io.on("connection", client => {
 MongoClient.connect(url, {useUnifiedTopology: true}, function(err, db) {
     if (err) throw err;
     let dbo = db.db("gantt");
+    let count = dbo.collection("TuMeCherches_TuMeTrouves").find({}).count();
     dbo.createCollection("TuMeCherches_TuMeTrouves", function(err, res) {
       if (err) throw err;
     });
