@@ -59,24 +59,24 @@ const gantt = {
 
 io.on("connection", client => {
   client.on("connection", data => console.log(data));
-  client.on("disconnect", function() {
+  client.on("disconnect", function () {
     console.log("user disconnected");
   });
 
-  MongoClient.connect(url, { useUnifiedTopology: true }, function(err, db) {
+  MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
     if (err) throw err;
     let dbo = db.db("gantt");
     let count = dbo
       .collection("TuMeCherches_TuMeTrouves")
       .find({})
       .count();
-    dbo.createCollection("TuMeCherches_TuMeTrouves", function(err, res) {
+    dbo.createCollection("TuMeCherches_TuMeTrouves", function (err, res) {
       if (err) throw err;
     });
 
     // Ajout d'un objet
 
-    // dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
+    dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
 
     // Création d'une promise pour compter le nombre de task en base de données
 
@@ -85,7 +85,7 @@ io.on("connection", client => {
         let count = dbo
           .collection("TuMeCherches_TuMeTrouves")
           .find({})
-          .toArray(function(err, data) {
+          .toArray(function (err, data) {
             err ? reject(err) : resolve(data[0]);
           });
       });
@@ -96,7 +96,7 @@ io.on("connection", client => {
       return result;
     };
 
-    callMyPromise().then(function(result) {
+    callMyPromise().then(function (result) {
       let tasks = result.task;
       tasks = tasks.length;
     });
@@ -106,7 +106,7 @@ io.on("connection", client => {
     dbo
       .collection("TuMeCherches_TuMeTrouves")
       .find({})
-      .toArray(function(err, result) {
+      .toArray(function (err, result) {
         if (err) throw err;
         result.forEach(element =>
           io.emit("desc", element.name + " : " + element.desc)
@@ -115,27 +115,27 @@ io.on("connection", client => {
 
     // Recherche de toutes les données sur les tâches puis envoi vers le front
 
-    callMyPromise().then(function(result) {
+    callMyPromise().then(function (result) {
       let tasks = result.task;
       tasks = tasks.length;
       dbo
         .collection("TuMeCherches_TuMeTrouves")
         .find({})
-        .toArray(function(err, result) {
+        .toArray(function (err, result) {
           if (err) throw err;
           for (let i = 0; i < tasks; i++) {
             result.forEach(element =>
               io.emit(
                 "task",
                 element.task[i].name +
-                  " : " +
-                  element.task[i].desc +
-                  ", " +
-                  element.task[i].start +
-                  " / " +
-                  element.task[i].end +
-                  ", " +
-                  element.task[i].percentageProgress
+                " : " +
+                element.task[i].desc +
+                ", " +
+                element.task[i].start +
+                " / " +
+                element.task[i].end +
+                ", " +
+                element.task[i].percentageProgress
               )
             );
           }
@@ -144,7 +144,7 @@ io.on("connection", client => {
 
     // Ajout d'une tâche dans la bdd
 
-    callMyPromise().then(function(result) {
+    callMyPromise().then(function (result) {
       let tasks = result.task;
       tasks = tasks.length;
       const taskData = result["task"];
@@ -156,7 +156,7 @@ io.on("connection", client => {
                 client.on("color", dataColor => {
                   client.on("linkedTask", dataLinkedTask => {
                     client.on("ressources", dataRessources => {
-                      MongoClient.connect(url, function(err, db) {
+                      MongoClient.connect(url, function (err, db) {
                         if (err) throw err;
                         let dataId = tasks;
                         let taskInsert = {
