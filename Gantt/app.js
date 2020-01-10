@@ -54,8 +54,8 @@ const gantt = {
   milestones: [{ name: "Jalon1", date: Date.now() }]
 };
 
-    // const taskData = gantt["task"][0];
-    // console.log(taskData);
+// const taskData = gantt["task"][0];
+// console.log(taskData);
 
 io.on("connection", client => {
   client.on("connection", data => console.log(data));
@@ -74,7 +74,6 @@ io.on("connection", client => {
       if (err) throw err;
     });
 
-    
     // Ajout d'un objet
 
     // dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
@@ -149,34 +148,35 @@ io.on("connection", client => {
       let tasks = result.task;
       tasks = tasks.length;
       const taskData = result["task"];
-    client.on("name", dataName => {
-      client.on("desc", dataDesc => {
-        client.on("start", dataStart => {
-          client.on("end", dataEnd => {
-            client.on("percentageProgress", dataPercentageProgress => {
-              client.on("color", dataColor => {
-                client.on("linkedTask", dataLinkedTask => {
-                  client.on("ressources", dataRessources => {
-                    MongoClient.connect(url, function(err, db) {
-                      if (err) throw err;
-                      let dataId = tasks;
-                      let task = {
-                        id: dataId,
-                        name: dataName,
-                        desc: dataDesc,
-                        start: dataStart,
-                        end: dataEnd,
-                        percentageProgress: dataPercentageProgress,
-                        color: dataColor,
-                        linkedTask: dataLinkedTask,
-                        ressources: dataRessources
-                      };
-                      dbo
-                        .collection("TuMeCherches_TuMeTrouves").taskData
-                        .insertOne(task, function(err, res) {
-                          if (err) throw err;
-                          console.log("task inserted");
-                        });
+      client.on("name", dataName => {
+        client.on("desc", dataDesc => {
+          client.on("start", dataStart => {
+            client.on("end", dataEnd => {
+              client.on("percentageProgress", dataPercentageProgress => {
+                client.on("color", dataColor => {
+                  client.on("linkedTask", dataLinkedTask => {
+                    client.on("ressources", dataRessources => {
+                      MongoClient.connect(url, function(err, db) {
+                        if (err) throw err;
+                        let dataId = tasks;
+                        let taskInsert = {
+                          id: dataId,
+                          name: dataName,
+                          desc: dataDesc,
+                          start: dataStart,
+                          end: dataEnd,
+                          percentageProgress: dataPercentageProgress,
+                          color: dataColor,
+                          linkedTask: dataLinkedTask,
+                          ressources: dataRessources
+                        };
+                        dbo
+                          .collection("TuMeCherches_TuMeTrouves")
+                          .updateOne(
+                            { name: "Gantt" },
+                            { $push: { task: taskInsert } }
+                          );
+                      });
                     });
                   });
                 });
@@ -186,7 +186,6 @@ io.on("connection", client => {
         });
       });
     });
-  });
 
     // db.close();
   });
