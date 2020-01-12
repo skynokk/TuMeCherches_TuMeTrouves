@@ -2,8 +2,6 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
-const socket = require("socket.io-client");
-let client = socket.connect("http://51.15.137.122:18000/", { reconnect: true });
 
 const path = require("path");
 
@@ -11,6 +9,7 @@ app.use(express.static(path.join(__dirname, "Client")));
 
 const MongoClient = require("mongodb").MongoClient;
 let url = "mongodb://localhost:27017/gantt";
+
 const bdd = {
   name: "Gantt",
   desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
@@ -52,6 +51,7 @@ const bdd = {
   resources: [{ name: "Valentin", cost: 10, type: "humain" }],
   milestones: [{ name: "Jalon1", date: Date.now() }]
 }
+
 const gantt =  {
   nameService : "TuMeCherches_TuMeTrouves",
   projects : [{
@@ -97,7 +97,7 @@ const gantt =  {
 } ]
 };
 
-// const taskData = gantt["task"][0];
+// const taskData = bdd["task"][0];
 // console.log(taskData);
 
 io.on("connection", client => {
@@ -105,6 +105,9 @@ io.on("connection", client => {
   client.on("disconnect", function () {
     console.log("user disconnected");
   });
+
+  const socket = require("socket.io-client");
+  let clientProject = socket.connect("http://51.15.137.122:18000/", { reconnect: true });
 
   MongoClient.connect(url, { useUnifiedTopology: true }, function (err, db) {
     if (err) throw err;
@@ -119,8 +122,7 @@ io.on("connection", client => {
 
     // Ajout d'une collection
 
- //  dbo.collection("TuMeCherches_TuMeTrouves").insertOne(bdd);
-
+    //dbo.collection("TuMeCherches_TuMeTrouves").insertOne(bdd);
 
     // Création d'une promise pour compter le nombre de task en base de données
     let myPromise = () => {
@@ -245,79 +247,65 @@ io.on("connection", client => {
     });
 
 
+    // Modification d'une tâche dans la bdd
+    client.on("modificationId", data => {
+      console.log(data);
+      MongoClient.connect(url, function (err, db) {
+        if (err) console.log("Erreur lors de la modification");
+        const taskData = bdd["task"][data];
+        console.log(taskData);
+        
+        /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
+          if(err) console.log("Erreur lors de la modification");
+          console.log("modification efffectuée");
+        })*/
+      });
+    });
+
+
     // Supression d'une tâche dans la bdd
     client.on("suppressionId", data => {
       console.log(data);
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la suppression");
-        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ name: "Gantt" }, function(err, res){
+        const taskData = bdd["task"][data];
+        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
           if(err) console.log("Erreur lors de la suppression");
           console.log("Suppression efffectuée");
         })
       });
     });
+  });
 
-    // db.close();
+  clientProject.on('connect', () => {
+    console.log('connected')
+
+    // client.emit('needHelp');
+    // client.on('info', data => console.log(data));
+    clientProject.emit('getServices');
+    clientProject.on('servicies', data => console.log(data));
+    clientProject.emit('sendUpdate', gantt);
+    clientProject.on('projectUpdated ', data => console.log(data));
+    // client.on('errorOnProjectUpdate', data => console.log(data));
+
+    clientProject.on('projectUpdated', dataProject =>
+    {
+        dataProject.forEach(element => { for (let i = 0; i < element.projects[0].task.length; i++) {
+          io.emit(
+            "taskProject",
+            element.projects[0].task[i].name +
+            " : " +
+            element.projects[0].task[i].desc +
+            ", " +
+            element.projects[0].task[i].start +
+            " / " +
+            element.projects[0].task[i].end +
+            ", " +
+            element.projects[0].task[i].percentageProgress
+          )
+        }});
+    });
   });
 });
-
-
-// client.on('connect', () => {
-//   console.log('connected')
-
-//   // client.emit('needHelp');
-//   // client.on('info', data => console.log(data));
-//   client.emit('getServices');
-//   client.on('servicies', data => console.log(data));
-//   client.emit('sendUpdate', gantt);
-//   client.on('projectUpdated ', data => console.log(data));
-//   // client.on('errorOnProjectUpdate', data => console.log(data));
-
-/*client.on('projectUpdated', dataProject =>
-{
-  for (let i = 0; i < dataProject.length; i++) {
-    dataProject.forEach(element =>
-      // console.log(element.projects[0].task)
-    io.emit(
-      "taskProject",
-      element.projects[0].task[i].name +
-      " : " +
-      element.projects[0].task[i].desc +
-      ", " +
-      element.projects[0].task[i].start +
-      " / " +
-      element.projects[0].task[i].end +
-      ", " +
-      element.projects[0].task[i].percentageProgress
-    )
-  );
-    // console.log(dataProject[i].projects[0].task)
-  }
-}
-);*/
-
-
-//   client.on('projectUpdated', dataProject =>
-//   {
-//     for (let i = 0; i < dataProject.length; i++) {
-//       dataProject.forEach(element =>
-//         // console.log(element.projects[0].task)
-//         io.emit(
-//           "taskProject",
-//           element.projects[0].task[i].name +
-//           " : " +
-//           element.projects[0].task[i].desc +
-//           ", " +
-//           element.projects[0].task[i].start +
-//           " / " +
-//           element.projects[0].task[i].end +
-//           ", " +
-//           element.projects[0].task[i].percentageProgress
-//         )
-//       );
-//       // console.log(dataProject[i].projects[0].task)
-//     }
-//   });
-// });
 
 http.listen(3000);

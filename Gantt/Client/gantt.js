@@ -18,14 +18,18 @@ $("#addTask").submit(function (e) {
 
 $("#suppressionTache").submit(function (e) {
   e.preventDefault();
-  let suppressionId = $("input[name='suppressionTache']:checked").val();
+  let suppressionId = $("input[name='tache']:checked").val();
   socket.emit("suppressionId", suppressionId);
 });
 
+$("#modificationTache").submit(function (e) {
+  e.preventDefault();
+  let modificationId = $("input[name='tache']:checked").val();
+  socket.emit("modificationId", modificationId);
+});
+
 socket.on("desc", data => $("#gantt_desc").append($("<li>").text(data)));
-socket.on("radioId", data => $("#gantt_task")
-          .append($('<input type="radio" name="suppressionTache"  class="btn-radio" value="' + data +'"> '))    
-          );
+socket.on("radioId", data => $("#gantt_task").append($('<li><input type="radio" name="tache" value="' + data +'"> ')))
 socket.on("task", data =>
   $("#gantt_task")
     .append($("<li class=\"text-chacher\">").text(chars = data.split(",")))
@@ -35,6 +39,12 @@ socket.on("task", data =>
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width: 100%;background-color: gray;color: gray;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">").text("..."))
     .append($("<li class=\"text-chacher\">").text(data))
 );
+
+socket.on("taskProject", data =>
+  $("#gantt_project")
+    .append($("<li>").text(data))
+);
+
 /*
 socket.on("taskId", data =>
   $("#gantt_task")
