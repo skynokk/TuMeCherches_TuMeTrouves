@@ -1,5 +1,35 @@
-li{list-style:none;}
-
-input{margin-bottom: 10px;}
-
-.form{display: inline;}
+.cadre{
+    margin-left: 60px;
+    border: 4px;
+    border: 1px solid #ebebeb;
+    width: 80%;
+}
+.misse{
+    margin-right: 25px;
+    float: left;
+}
+#addTask{
+    margin-left: 30%;
+}
+.btn-rond{
+    border-radius: 50%;
+    margin-top: 20px;
+}
+.btn-js{
+    border-radius: 50%;
+    margin-top: 5px;
+    margin-bottom: 5%;
+}
+::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+  }
+   
+  ::-webkit-scrollbar-thumb {
+    background: gray; 
+    border-radius: 10px;
+  }
+  .text-chacher{
+    display:none;
+  }
+    

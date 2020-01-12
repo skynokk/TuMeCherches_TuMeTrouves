@@ -13,7 +13,7 @@ const MongoClient = require("mongodb").MongoClient;
 let url = "mongodb://localhost:27017/gantt";
 
 const gantt =  {
-  nameService : "TuMeCherches_TuMeTrouves", 
+  nameService : "TuMeCherches_TuMeTrouves",
   projects : [{
   name: "Gantt",
   desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
@@ -54,7 +54,7 @@ const gantt =  {
   groupTask: [{ name: "Back", start: Date.now(), end: Date.now() }],
   resources: [{ name: "Valentin", cost: 10, type: "humain" }],
   milestones: [{ name: "Jalon1", date: Date.now() }]
-} ] 
+} ]
 };
 
 // const taskData = gantt["task"][0];
@@ -81,8 +81,8 @@ io.on("connection", client => {
 
     //dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
 
-    // Création d'une promise pour compter le nombre de task en base de données
 
+    // Création d'une promise pour compter le nombre de task en base de données
     let myPromise = () => {
       return new Promise((resolve, reject) => {
         let count = dbo
@@ -104,8 +104,8 @@ io.on("connection", client => {
       tasks = tasks.length;
     });
 
-    // Recherche du nom et de la description puis envoi vers le front
 
+    // Recherche du nom et de la description puis envoi vers le front
     dbo
       .collection("TuMeCherches_TuMeTrouves")
       .find({})
@@ -116,8 +116,8 @@ io.on("connection", client => {
         );
       });
 
-    // Recherche de toutes les données sur les tâches puis envoi vers le front
 
+    // Recherche de toutes les données sur les tâches puis envoi vers le front
     callMyPromise().then(function (result) {
       let tasks = result.task;
       tasks = tasks.length;
@@ -127,6 +127,12 @@ io.on("connection", client => {
         .toArray(function (err, result) {
           if (err) throw err;
           for (let i = 0; i < tasks; i++) {
+            result.forEach(element =>
+              io.emit(
+                "radioId",
+                element.task[i].id
+              )
+            );
             result.forEach(element =>
               io.emit(
                 "task",
@@ -140,19 +146,19 @@ io.on("connection", client => {
                 ", " +
                 element.task[i].percentageProgress
               )
-            );
+            );/*
             result.forEach(element =>
               io.emit(
                 "taskId",
-                element.task[i].id
+                element.task[i].name
               )
-            );
+            );*/
           }
         });
     });
 
-    // Ajout d'une tâche dans la bdd
 
+    // Ajout d'une tâche dans la bdd
     callMyPromise().then(function (result) {
       let tasks = result.task;
       tasks = tasks.length;
@@ -196,6 +202,20 @@ io.on("connection", client => {
       });
     });
 
+
+    // Supression d'une tâche dans la bdd
+    client.on("suppressionId", data => {
+      console.log(data);
+      MongoClient.connect(url, function (err, db) {
+        if (err) console.log("Erreur lors de la suppression");
+        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ name: "Gantt" }, function(err, res){
+          if(err) console.log("Erreur lors de la suppression");
+          console.log("Suppression efffectuée");
+        })
+      });
+    });
+
+    // db.close();
   });
 });
 
@@ -211,9 +231,9 @@ client.on('projectUpdated ', data => console.log(data));
 // client.on('errorOnProjectUpdate', data => console.log(data));
 
 
-client.on('projectUpdated', dataProject =>  
-{ 
-  for (let i = 0; i < dataProject.length; i++) { 
+client.on('projectUpdated', dataProject =>
+{
+  for (let i = 0; i < dataProject.length; i++) {
     dataProject.forEach(element =>
       // console.log(element.projects[0].task)
     io.emit(
