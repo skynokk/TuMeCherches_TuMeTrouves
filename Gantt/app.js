@@ -9,6 +9,7 @@ app.use(express.static(path.join(__dirname, "Client")));
 
 const MongoClient = require("mongodb").MongoClient;
 let url = "mongodb://localhost:27017/gantt";
+
 const bdd = {
   name: "Gantt",
   desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
@@ -121,7 +122,7 @@ io.on("connection", client => {
 
     // Ajout d'une collection
 
-    // dbo.collection("TuMeCherches_TuMeTrouves").insertOne(bdd);
+    //dbo.collection("TuMeCherches_TuMeTrouves").insertOne(bdd);
 
     // Création d'une promise pour compter le nombre de task en base de données
     let myPromise = () => {
@@ -246,12 +247,29 @@ io.on("connection", client => {
     });
 
 
+    // Modification d'une tâche dans la bdd
+    client.on("modificationId", data => {
+      console.log(data);
+      MongoClient.connect(url, function (err, db) {
+        if (err) console.log("Erreur lors de la modification");
+        const taskData = bdd["task"][data];
+        console.log(taskData);
+        
+        /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
+          if(err) console.log("Erreur lors de la modification");
+          console.log("modification efffectuée");
+        })*/
+      });
+    });
+
+
     // Supression d'une tâche dans la bdd
     client.on("suppressionId", data => {
       console.log(data);
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la suppression");
-        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ name: "Gantt" }, function(err, res){
+        const taskData = bdd["task"][data];
+        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
           if(err) console.log("Erreur lors de la suppression");
           console.log("Suppression efffectuée");
         })
