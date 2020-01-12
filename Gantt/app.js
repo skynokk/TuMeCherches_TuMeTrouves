@@ -184,7 +184,9 @@ io.on("connection", client => {
                 " / " +
                 element.task[i].end +
                 ", " +
-                element.task[i].percentageProgress
+                element.task[i].percentageProgress +
+                ", " +
+                element.task[i].color
               )
             );/*
             result.forEach(element =>
@@ -271,7 +273,6 @@ io.on("connection", client => {
 //   client.on('projectUpdated ', data => console.log(data));
 //   // client.on('errorOnProjectUpdate', data => console.log(data));
 
-<<<<<<< HEAD
 /*client.on('projectUpdated', dataProject =>
 {
   for (let i = 0; i < dataProject.length; i++) {
@@ -294,8 +295,7 @@ io.on("connection", client => {
   }
 }
 );*/
-=======
->>>>>>> 3a09ec9bff5b408221ef0f0eeff25d13d6d9dd3f
+
 
 //   client.on('projectUpdated', dataProject =>
 //   {
