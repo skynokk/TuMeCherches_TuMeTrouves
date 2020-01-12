@@ -15,10 +15,9 @@
     border-radius: 50%;
     margin-top: 20px;
 }
-.btn-js{
+.btn-supp{
     border-radius: 50%;
-    margin-top: 5px;
-    margin-bottom: 5%;
+    margin-left: 5%;
 }
 ::-webkit-scrollbar {
     width: 5px;
@@ -32,4 +31,8 @@
   .text-chacher{
     display:none;
   }
-    
+  .btn-radio{  
+    margin-top: 3px;
+    margin-left: -21px;
+    position: absolute;
+  }

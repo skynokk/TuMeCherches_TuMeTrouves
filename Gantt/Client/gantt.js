@@ -23,14 +23,16 @@ $("#suppressionTache").submit(function (e) {
 });
 
 socket.on("desc", data => $("#gantt_desc").append($("<li>").text(data)));
-socket.on("radioId", data => $("#gantt_task").append($('<li><input type="radio" name="suppressionTache" value="' + data +'"> ')))
+socket.on("radioId", data => $("#gantt_task")
+          .append($('<input type="radio" name="suppressionTache"  class="btn-radio" value="' + data +'"> '))    
+          );
 socket.on("task", data =>
   $("#gantt_task")
     .append($("<li class=\"text-chacher\">").text(chars = data.split(",")))
     .append($("<li>").text(chars[0]))
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width:"+chars[2]+"%;color: white; position: absolute;\" aria-valuenow="+chars[2]+"; aria-valuemin=\"0\" aria-valuemax=\"100\">").text(chars[2]+"%/100%"))
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width: 100%;background-color: gray;color: gray;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">").text("..."))
-    .append($("<li>").text(data))
+    .append($("<li class=\"text-chacher\">").text(data))
 );
 /*
 socket.on("taskId", data =>
