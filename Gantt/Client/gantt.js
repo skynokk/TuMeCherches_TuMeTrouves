@@ -18,12 +18,18 @@ $("#addTask").submit(function (e) {
 
 $("#suppressionTache").submit(function (e) {
   e.preventDefault();
-  let suppressionId = $("input[name='suppressionTache']:checked").val();
+  let suppressionId = $("input[name='tache']:checked").val();
   socket.emit("suppressionId", suppressionId);
 });
 
+$("#modificationTache").submit(function (e) {
+  e.preventDefault();
+  let modificationId = $("input[name='tache']:checked").val();
+  socket.emit("modificationId", modificationId);
+});
+
 socket.on("desc", data => $("#gantt_desc").append($("<li>").text(data)));
-socket.on("radioId", data => $("#gantt_task").append($('<li><input type="radio" name="suppressionTache" value="' + data +'"> ')))
+socket.on("radioId", data => $("#gantt_task").append($('<li><input type="radio" name="tache" value="' + data +'"> ')))
 socket.on("task", data =>
   $("#gantt_task")
     .append($("<li class=\"text-chacher\">").text(chars = data.split(",")))

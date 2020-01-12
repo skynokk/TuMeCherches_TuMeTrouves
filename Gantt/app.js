@@ -12,6 +12,48 @@ app.use(express.static(path.join(__dirname, "Client")));
 const MongoClient = require("mongodb").MongoClient;
 let url = "mongodb://localhost:27017/gantt";
 
+const bdd = {
+  name: "Gantt",
+  desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
+  daysOff: {
+    Mo: true,
+    Tu: true,
+    We: true,
+    Th: true,
+    Fr: true,
+    Sa: false,
+    Su: false
+  },
+  workingHours: { start: 1491680626329, end: 1491684607029 },
+  task: [
+    {
+      id: 0,
+      name: "Creation projet",
+      desc: "Creer le back",
+      start: 1491680626329,
+      end: 1491684607029,
+      percentageProgress: 75,
+      color: "#fc0202",
+      linkedTask: [],
+      ressources: []
+    },
+    {
+      id: 1,
+      name: "Affichage projet",
+      desc: "Creer le front",
+      start: 1491680627829,
+      end: 1491684608529,
+      percentageProgress: 50,
+      color: "#fc4545",
+      linkedTask: [],
+      ressources: []
+    }
+  ],
+  groupTask: [{ name: "Back", start: Date.now(), end: Date.now() }],
+  resources: [{ name: "Valentin", cost: 10, type: "humain" }],
+  milestones: [{ name: "Jalon1", date: Date.now() }]
+}
+
 const gantt =  {
   nameService : "TuMeCherches_TuMeTrouves",
   projects : [{
@@ -79,7 +121,7 @@ io.on("connection", client => {
 
     // Ajout d'une collection
 
-    // dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
+    //dbo.collection("TuMeCherches_TuMeTrouves").insertOne(bdd);
 
 
     // Création d'une promise pour compter le nombre de task en base de données
@@ -203,12 +245,29 @@ io.on("connection", client => {
     });
 
 
+    // Modification d'une tâche dans la bdd
+    client.on("modificationId", data => {
+      console.log(data);
+      MongoClient.connect(url, function (err, db) {
+        if (err) console.log("Erreur lors de la modification");
+        const taskData = bdd["task"][data];
+        console.log(taskData);
+        
+        /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
+          if(err) console.log("Erreur lors de la modification");
+          console.log("modification efffectuée");
+        })*/
+      });
+    });
+
+
     // Supression d'une tâche dans la bdd
     client.on("suppressionId", data => {
       console.log(data);
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la suppression");
-        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ name: "Gantt" }, function(err, res){
+        const taskData = bdd["task"][data];
+        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
           if(err) console.log("Erreur lors de la suppression");
           console.log("Suppression efffectuée");
         })
