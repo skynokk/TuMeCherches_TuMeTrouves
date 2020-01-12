@@ -219,41 +219,40 @@ io.on("connection", client => {
   });
 });
 
-client.on('connect', () => {
-  console.log('connected')
 
-// client.emit('needHelp');
-// client.on('info', data => console.log(data));
-client.emit('getServices');
-client.on('servicies', data => console.log(data));
-client.emit('sendUpdate', gantt);
-client.on('projectUpdated ', data => console.log(data));
-// client.on('errorOnProjectUpdate', data => console.log(data));
+// client.on('connect', () => {
+//   console.log('connected')
+
+//   // client.emit('needHelp');
+//   // client.on('info', data => console.log(data));
+//   client.emit('getServices');
+//   client.on('servicies', data => console.log(data));
+//   client.emit('sendUpdate', gantt);
+//   client.on('projectUpdated ', data => console.log(data));
+//   // client.on('errorOnProjectUpdate', data => console.log(data));
 
 
-client.on('projectUpdated', dataProject =>
-{
-  for (let i = 0; i < dataProject.length; i++) {
-    dataProject.forEach(element =>
-      // console.log(element.projects[0].task)
-    io.emit(
-      "taskProject",
-      element.projects[0].task[i].name +
-      " : " +
-      element.projects[0].task[i].desc +
-      ", " +
-      element.projects[0].task[i].start +
-      " / " +
-      element.projects[0].task[i].end +
-      ", " +
-      element.projects[0].task[i].percentageProgress
-    )
-  );
-    // console.log(dataProject[i].projects[0].task)
-  }
-}
-);
-
-});
+//   client.on('projectUpdated', dataProject =>
+//   {
+//     for (let i = 0; i < dataProject.length; i++) {
+//       dataProject.forEach(element =>
+//         // console.log(element.projects[0].task)
+//         io.emit(
+//           "taskProject",
+//           element.projects[0].task[i].name +
+//           " : " +
+//           element.projects[0].task[i].desc +
+//           ", " +
+//           element.projects[0].task[i].start +
+//           " / " +
+//           element.projects[0].task[i].end +
+//           ", " +
+//           element.projects[0].task[i].percentageProgress
+//         )
+//       );
+//       // console.log(dataProject[i].projects[0].task)
+//     }
+//   });
+// });
 
 http.listen(3000);
