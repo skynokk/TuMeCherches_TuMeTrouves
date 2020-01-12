@@ -74,9 +74,9 @@ io.on("connection", client => {
       if (err) throw err;
     });
 
-    // Ajout d'un objet
+    // Ajout d'une collection
 
-    dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
+    //dbo.collection("TuMeCherches_TuMeTrouves").insertOne(gantt);
 
     // Création d'une promise pour compter le nombre de task en base de données
 
@@ -136,6 +136,12 @@ io.on("connection", client => {
                 element.task[i].end +
                 ", " +
                 element.task[i].percentageProgress
+              )
+            );
+            result.forEach(element =>
+              io.emit(
+                "taskId",
+                element.task[i].id
               )
             );
           }
