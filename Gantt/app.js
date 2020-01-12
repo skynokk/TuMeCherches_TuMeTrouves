@@ -291,7 +291,7 @@ io.on("connection", client => {
     clientProject.on('projectUpdated', dataProject =>
     {
       dataProject.forEach(element => { 
-        if(element.projects[0] = []){console.log("Y'a que raphael pour faire ça")}
+        if(element.projects[0] == []){console.log("Y'a que raphael pour faire ça")}
         else {
           for (let i = 0; i < element.projects[0].task.length; i++) {
             io.emit(
