@@ -40,6 +40,7 @@ socket.on("taskProject", data =>
   $("#gantt_project")
     .append($("<li>").text(data))
 );
+
 /*
 socket.on("taskId", data =>
   $("#gantt_task")
