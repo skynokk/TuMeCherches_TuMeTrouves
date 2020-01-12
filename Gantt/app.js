@@ -8,6 +8,7 @@ const path = require("path");
 app.use(express.static(path.join(__dirname, "Client")));
 
 const MongoClient = require("mongodb").MongoClient;
+const MongoRequest = require("mongodb");
 let url = "mongodb://localhost:27017/gantt";
 
 const bdd = {
@@ -276,8 +277,31 @@ io.on("connection", client => {
         })
       });
     });
+
+    // Récupération des informations en bdd
+    let MongoObjectID = require("mongodb").ObjectID;
+    let idToFind      = "5e1b5225dc1f86394c164521";
+    let objToFind     = { _id: new MongoObjectID(idToFind) };
+
+    dbo.collection("TuMeCherches_TuMeTrouves").findOne(objToFind, function(error, result) {
+        if (error) throw error;
+        console.log(result);
+        const envoieDonnees = {nameService : "TuMeCherches_TuMeTrouves", projects : [result]};   
+    });
+
+    /*
+    const envoieDonnees = 0;
+    MongoClient.connect(url, function (err, db) {
+      if (err) console.log("Erreur lors de la récupartaion");
+      const gantProject = dbo.collection("TuMeCherches_TuMeTrouves").find({name : "Gantt"});
+      console.log(gantProject);
+        
+      //envoieDonnees = {nameService : "TuMeCherches_TuMeTrouves", projects : [gantProject]};
+    });*/
+
   });
-/*
+
+
   clientProject.on('connect', () => {
     console.log('connected')
 
@@ -287,7 +311,7 @@ io.on("connection", client => {
     clientProject.on('servicies', data => console.log(data));
     clientProject.emit('sendUpdate', gantt);
     clientProject.on('projectUpdated ', data => console.log(data));
-    // client.on('errorOnProjectUpdate', data => console.log(data));
+    client.on('errorOnProjectUpdate', data => console.log(data));
 
     clientProject.on('projectUpdated', dataProject =>
     {
@@ -311,7 +335,7 @@ io.on("connection", client => {
         }
       });
     });
-  });*/
+  });
 });
 
 http.listen(3000);
