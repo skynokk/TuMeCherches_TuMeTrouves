@@ -255,8 +255,8 @@ io.on("connection", client => {
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la modification");
         const taskData = bdd["task"][data];
-        console.log(taskData.name);
-        io.emit("modifTask", taskData.name);
+        console.log(taskData);
+
         /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
           if(err) console.log("Erreur lors de la modification");
           console.log("modification efffectuée");
@@ -301,7 +301,6 @@ io.on("connection", client => {
 
   });
 
-
   clientProject.on('connect', () => {
     console.log('connected')
 
@@ -316,7 +315,7 @@ io.on("connection", client => {
     clientProject.on('projectUpdated', dataProject =>
     {
       dataProject.forEach(element => { 
-        if(element.projects[0] == []){console.log("Y'a que raphael pour faire ça")}
+        if(element.projects == []){console.log("Y'a que raphael pour faire ça")}
         else {
           for (let i = 0; i < element.projects[0].task.length; i++) {
             io.emit(
