@@ -29,7 +29,7 @@ $("#modificationTache").submit(function (e) {
 });
 
 socket.on("desc", data => $("#gantt_desc").append($("<li>").text(data)));
-socket.on("radioId", data => $("#gantt_task").append($('<li><input type="radio" name="tache" value="' + data +'"> ')))
+socket.on("radioId", data => $("#gantt_task").append($('<input type="radio" class="btn-radio" name="tache" value="' + data +'"> ')))
 socket.on("task", data =>
   $("#gantt_task")
     .append($("<li class=\"text-chacher\">").text(chars = data.split(",")))
