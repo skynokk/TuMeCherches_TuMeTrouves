@@ -32,6 +32,11 @@ socket.on("task", data =>
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width: 100%;background-color: gray;color: gray;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">").text("..."))
     .append($("<li>").text(data))
 );
+
+socket.on("taskProject", data =>
+  $("#gantt_project")
+    .append($("<li>").text(data))
+);
 /*
 socket.on("taskId", data =>
   $("#gantt_task")
