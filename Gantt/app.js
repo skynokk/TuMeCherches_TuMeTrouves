@@ -106,6 +106,7 @@ io.on("connection", client => {
     console.log("user disconnected");
   });
 
+
   const socket = require("socket.io-client");
   let clientProject = socket.connect("http://51.15.137.122:18000/", { reconnect: true });
 
@@ -254,7 +255,7 @@ io.on("connection", client => {
         if (err) console.log("Erreur lors de la modification");
         const taskData = bdd["task"][data];
         console.log(taskData);
-        
+
         /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
           if(err) console.log("Erreur lors de la modification");
           console.log("modification efffectuée");

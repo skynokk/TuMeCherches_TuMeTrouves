@@ -25,6 +25,7 @@ $("#suppressionTache").submit(function (e) {
 $("#modificationTache").submit(function (e) {
   e.preventDefault();
   let modificationId = $("input[name='tache']:checked").val();
+  
   socket.emit("modificationId", modificationId);
 });
 
