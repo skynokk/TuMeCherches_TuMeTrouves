@@ -3,28 +3,53 @@
     <title>Gantt</title>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css" />
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="images/Logo-Gantt-2.7.2.png" />
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
   </head>
   <body>
     <h1>Gantt</h1>
     <ul id="gantt_desc"></ul><br>
+    <div class="gantt">
     <ul id="gantt_task"></ul><br>
     <form id="suppressionTache">
       <button>Supprimer la tache</button>
     </form>
     <h2>Ajout d'une tâche</h2><br>
-    <form id="addTask" action="">
-      <p class="form">Name : </p><input type="text" id="name" autocomplete="off" /><br>
-      <p class="form">Description : </p><input type="text" id="desc" autocomplete="off" /><br>
-      <p class="form">Début : </p><input type="number" id="start" autocomplete="off" /><br>
-      <p class="form">Fin : </p><input type="number" id="end" autocomplete="off" /><br>
-      <p class="form">Progression : </p><input type="number" id="percentageProgress" autocomplete="off" /><br>
-      <p class="form">Couleur : </p><input type="text" id="color" autocomplete="off" /><br>
-      <p class="form">Tâches liées : </p><input type="text" id="linkedTask" autocomplete="off" /><br>
-      <p class="form">Ressources : </p><input type="text" id="ressources" autocomplete="off" /><br>
-      <button>Envoyer</button>
+    <div class="cadre">
+    <form id="addTask" action="" >
+      <div class="misse">
+        <p class="form">Name : </p><input type="text" id="name" autocomplete="off" /><br>
+      </div>
+      <div>
+        <p class="form">Description : </p><input type="text" id="desc" autocomplete="off" /><br>
+      </div>
+      <div class="misse">
+        <p class="form">Début : </p><input type="number" id="start" autocomplete="off" /><br>
+      </div>
+      <div>
+        <p class="form">Fin : </p><input type="number" id="end" autocomplete="off" /><br>
+      </div>
+      <div class="misse">
+        <p class="form">Progression : </p><input type="number" id="percentageProgress" autocomplete="off" /><br>
+      </div>
+      <div>
+        <p class="form">Couleur : </p><input type="text" id="color" autocomplete="off" /><br>
+      </div>
+      <div class="misse">
+        <p class="form">Tâches liées : </p><input type="text" id="linkedTask" autocomplete="off" /><br>
+      </div>
+      <div>
+        <p class="form">Ressources : </p><input type="text" id="ressources" autocomplete="off" /><br>
+      </div>
+      <button class="btn btn-success btn-rond">Envoyer</button>
     </form>
-  </body>
+  </div>
+    </body>
   <script src="/gantt.js">
   </script>
 </html>
