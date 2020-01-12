@@ -9,7 +9,6 @@ app.use(express.static(path.join(__dirname, "Client")));
 
 const MongoClient = require("mongodb").MongoClient;
 let url = "mongodb://localhost:27017/gantt";
-
 const bdd = {
   name: "Gantt",
   desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
@@ -186,7 +185,9 @@ io.on("connection", client => {
                 " / " +
                 element.task[i].end +
                 ", " +
-                element.task[i].percentageProgress
+                element.task[i].percentageProgress +
+                ", " +
+                element.task[i].color
               )
             );/*
             result.forEach(element =>
@@ -260,7 +261,7 @@ io.on("connection", client => {
 
   clientProject.on('connect', () => {
     console.log('connected')
-  
+
     // client.emit('needHelp');
     // client.on('info', data => console.log(data));
     clientProject.emit('getServices');
