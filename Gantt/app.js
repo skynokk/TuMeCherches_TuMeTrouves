@@ -291,20 +291,25 @@ io.on("connection", client => {
 
     clientProject.on('projectUpdated', dataProject =>
     {
-        dataProject.forEach(element => { for (let i = 0; i < element.projects[0].task.length; i++) {
-          io.emit(
-            "taskProject",
-            element.projects[0].task[i].name +
-            " : " +
-            element.projects[0].task[i].desc +
-            ", " +
-            element.projects[0].task[i].start +
-            " / " +
-            element.projects[0].task[i].end +
-            ", " +
-            element.projects[0].task[i].percentageProgress
-          )
-        }});
+      dataProject.forEach(element => { 
+        if(element.projects[0] == []){console.log("Y'a que raphael pour faire ça")}
+        else {
+          for (let i = 0; i < element.projects[0].task.length; i++) {
+            io.emit(
+              "taskProject",
+              element.projects[0].task[i].name +
+              " : " +
+              element.projects[0].task[i].desc +
+               ", " +
+              element.projects[0].task[i].start +
+              " / " +
+              element.projects[0].task[i].end +
+              ", " +
+              element.projects[0].task[i].percentageProgress
+             )
+          }
+        }
+      });
     });
   });*/
 });
