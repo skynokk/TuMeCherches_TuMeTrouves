@@ -30,7 +30,6 @@ socket.on("task", data =>
     .append($("<li>").text(chars[0]))
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width:"+chars[2]+"%;color: white; position: absolute;\" aria-valuenow="+chars[2]+"; aria-valuemin=\"0\" aria-valuemax=\"100\">").text(chars[2]+"%/100%"))
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width: 100%;background-color: gray;color: gray;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">").text("..."))
-    .append($("</li><button class=\"btn btn-danger btn-js\">Supprimer</button>"))
     .append($("<li>").text(data))
 );
 /*
