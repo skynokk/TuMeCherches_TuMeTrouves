@@ -254,8 +254,8 @@ io.on("connection", client => {
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la modification");
         const taskData = bdd["task"][data];
-        console.log(taskData);
-
+        console.log(taskData.name);
+        io.emit("modifTask", taskData.name);
         /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
           if(err) console.log("Erreur lors de la modification");
           console.log("modification efffectuée");
@@ -277,7 +277,7 @@ io.on("connection", client => {
       });
     });
   });
-
+/*
   clientProject.on('connect', () => {
     console.log('connected')
 
@@ -311,7 +311,7 @@ io.on("connection", client => {
         }
       });
     });
-  });
+  });*/
 });
 
 http.listen(3000);

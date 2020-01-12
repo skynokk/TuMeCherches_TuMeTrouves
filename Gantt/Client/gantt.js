@@ -25,7 +25,6 @@ $("#suppressionTache").submit(function (e) {
 $("#modificationTache").submit(function (e) {
   e.preventDefault();
   let modificationId = $("input[name='tache']:checked").val();
-  
   socket.emit("modificationId", modificationId);
 });
 
@@ -40,6 +39,8 @@ socket.on("task", data =>
     .append($("<li class=\"progress-bar\" role=\"progressbar\" style=\"width: 100%;background-color: gray;color: gray;\" aria-valuenow=\"25\" aria-valuemin=\"0\" aria-valuemax=\"100\">").text("..."))
     .append($("<li class=\"text-chacher\">").text(data))
 );
+
+socket.on("modifTask", data => $("#modifname").text(data));
 
 socket.on("taskProject", data =>
   $("#gantt_project")
