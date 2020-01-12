@@ -25,11 +25,12 @@ $("#suppressionTache").submit(function (e) {
 $("#modificationTache").submit(function (e) {
   e.preventDefault();
   let modificationId = $("input[name='tache']:checked").val();
+  
   socket.emit("modificationId", modificationId);
 });
 
 socket.on("desc", data => $("#gantt_desc").append($("<li>").text(data)));
-socket.on("radioId", data => $("#gantt_task").append($('<li><input type="radio" name="tache" value="' + data +'"> ')))
+socket.on("radioId", data => $("#gantt_task").append($('<input type="radio" class="btn-radio" name="tache" value="' + data +'"> ')))
 socket.on("task", data =>
   $("#gantt_task")
     .append($("<li class=\"text-chacher\">").text(chars = data.split(",")))
