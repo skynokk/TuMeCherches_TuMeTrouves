@@ -12,7 +12,9 @@ app.use(express.static(path.join(__dirname, "Client")));
 const MongoClient = require("mongodb").MongoClient;
 let url = "mongodb://localhost:27017/gantt";
 
-const gantt = {
+const gantt =  {
+  nameService : "TuMeCherches_TuMeTrouves", 
+  projects : [{
   name: "Gantt",
   desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
   daysOff: {
@@ -24,7 +26,7 @@ const gantt = {
     Sa: false,
     Su: false
   },
-  workingHours: { start: 8.3, end: 16.3 },
+  workingHours: { start: 1491680626329, end: 1491684607029 },
   task: [
     {
       id: 0,
@@ -52,6 +54,7 @@ const gantt = {
   groupTask: [{ name: "Back", start: Date.now(), end: Date.now() }],
   resources: [{ name: "Valentin", cost: 10, type: "humain" }],
   milestones: [{ name: "Jalon1", date: Date.now() }]
+} ] 
 };
 
 // const taskData = gantt["task"][0];
@@ -193,31 +196,44 @@ io.on("connection", client => {
       });
     });
 
-    // db.close();
   });
 });
 
-// client.on('connect', () => {
-//   console.log('connected')
-
-//   client.emit( {
-//     nameService : "TuMeCherches_TuMeTrouves",
-//     projects : [
-//    {
-//       name : "Gantt",
-//       desc : "Ce projet a pour but d'afficher un diagramme de Gantt",
-//       daysOff : { Mo : true, Tu : true,  We : true, Th : true, Fr : true, Sa : false, Su : false },
-//       workingHours : { start : 8.30, end : 16.30 },
-//       task : [{ id : 0, name : "Creation projet", desc : "Creer le back", start : 1491680626329, end : 1491684607029, percentageProgress : 50, color  : "#fc0202", linkedTask : [], ressources : [] }],
-//       groupTask : [{ name : "Back", start : Date.now(), end : Date.now() }],
-//       resources : [{ name : "Valentin", cost : 10, type : "humain" }],
-//       milestones : [{ name : "Jalon1", date : Date.now() }]
-//      }
-//     ]
-//    });
+client.on('connect', () => {
+  console.log('connected')
 
 // client.emit('needHelp');
-// client.on('projectUpdated ');
-// });
+// client.on('info', data => console.log(data));
+client.emit('getServices');
+client.on('servicies', data => console.log(data));
+client.emit('sendUpdate', gantt);
+client.on('projectUpdated ', data => console.log(data));
+// client.on('errorOnProjectUpdate', data => console.log(data));
+
+
+client.on('projectUpdated', dataProject =>  
+{ 
+  for (let i = 0; i < dataProject.length; i++) { 
+    dataProject.forEach(element =>
+      // console.log(element.projects[0].task)
+    io.emit(
+      "taskProject",
+      element.projects[0].task[i].name +
+      " : " +
+      element.projects[0].task[i].desc +
+      ", " +
+      element.projects[0].task[i].start +
+      " / " +
+      element.projects[0].task[i].end +
+      ", " +
+      element.projects[0].task[i].percentageProgress
+    )
+  );
+    // console.log(dataProject[i].projects[0].task)
+  }
+}
+);
+
+});
 
 http.listen(3000);

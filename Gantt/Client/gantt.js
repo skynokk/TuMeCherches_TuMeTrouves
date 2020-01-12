@@ -24,3 +24,8 @@ socket.on("taskId", data =>
   $("#gantt_task")
     .append($("</li><button id=\"" + data + "\">Supprimer</button>"))
 );
+
+socket.on("taskProject", data =>
+  $("#gantt_project")
+    .append($("<li>").text(data))
+);
