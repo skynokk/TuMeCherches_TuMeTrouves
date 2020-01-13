@@ -43,6 +43,8 @@ socket.on("task", data =>
     .append($("<li class=\"text-chacher\">").text(data))
 );
 
+socket.on("modifTask", data => $("#modifname").text(data));
+
 socket.on("taskProject", data =>
   $("#gantt_project")
 
