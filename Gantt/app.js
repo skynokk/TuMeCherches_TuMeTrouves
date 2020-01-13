@@ -250,21 +250,61 @@ io.on("connection", client => {
     });
 
 
-    // Modification d'une tâche dans la bdd
+    // Selection de la tache à modifier
     client.on("modificationId", data => {
       console.log(data);
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la modification");
         const taskData = bdd["task"][data];
         console.log(taskData);
-
-        /*dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
-          if(err) console.log("Erreur lors de la modification");
-          console.log("modification efffectuée");
-        })*/
+        client.emit("tachemodif", taskData.name);
       });
     });
 
+
+    // envoie de la modification d'une tâche dans la bdd
+    callMyPromise().then(function (result) {
+      let tasks = result.task;
+      tasks = tasks.length;
+      const taskData = result["task"];
+      client.on("modifname", dataName => {
+        client.on("modifdesc", dataDesc => {
+          client.on("modifstart", dataStart => {
+            client.on("modifend", dataEnd => {
+              client.on("modifpercentageProgress", dataPercentageProgress => {
+                client.on("modifcolor", dataColor => {
+                  client.on("modiflinkedTask", dataLinkedTask => {
+                    client.on("modifressources", dataRessources => {
+                      MongoClient.connect(url, function (err, db) {
+                        if (err) throw err;
+                        let dataId = tasks;
+                        let taskInsert = {
+                          id: dataId,
+                          name: dataName,
+                          desc: dataDesc,
+                          start: dataStart,
+                          end: dataEnd,
+                          percentageProgress: dataPercentageProgress,
+                          color: dataColor,
+                          linkedTask: dataLinkedTask,
+                          ressources: dataRessources
+                        };
+                        dbo
+                          .collection("TuMeCherches_TuMeTrouves")
+                          .updateOne(
+                            { name: "Gantt" },
+                            { $set: { task: taskInsert } }
+                          );
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
 
     // Supression d'une tâche dans la bdd
     client.on("suppressionId", data => {
@@ -281,14 +321,17 @@ io.on("connection", client => {
 
     // Récupération des informations en bdd
     let MongoObjectID = require("mongodb").ObjectID;
-    let idToFind = "5e1b5225dc1f86394c164521";
+    let idToFind = "5e18a7cea7e67f4404048a03";
     let objToFind = { _id: new MongoObjectID(idToFind) };
 
-    // dbo.collection("TuMeCherches_TuMeTrouves").findOne(objToFind, function (error, result) {
-    //   if (error) throw error;
-    //   console.log(result);
-    //   gantt = { nameService: "TuMeCherches_TuMeTrouves", projects: [result] };
-    // });
+    dbo.collection("TuMeCherches_TuMeTrouves").findOne(objToFind, function (error, result) {
+      if (error) throw error;
+      //console.log(result.task);
+      const test = { nameService: "TuMeCherches_TuMeTrouves", projects: [result] };
+      //console.log(test);
+      gantt.task = result.task;
+      //console.log(gantt.task);
+    });
 
     /*
     const envoieDonnees = 0;
