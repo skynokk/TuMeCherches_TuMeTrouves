@@ -10,6 +10,7 @@ app.use(express.static(path.join(__dirname, "Client")));
 const MongoClient = require("mongodb").MongoClient;
 const MongoRequest = require("mongodb");
 let url = "mongodb://localhost:27017/gantt";
+let envoieDonnees;
 
 const bdd = {
   name: "Gantt",
@@ -53,49 +54,49 @@ const bdd = {
   milestones: [{ name: "Jalon1", date: Date.now() }]
 }
 
-const gantt =  {
-  nameService : "TuMeCherches_TuMeTrouves",
-  projects : [{
-  name: "Gantt",
-  desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
-  daysOff: {
-    Mo: true,
-    Tu: true,
-    We: true,
-    Th: true,
-    Fr: true,
-    Sa: false,
-    Su: false
-  },
-  workingHours: { start: 1491680626329, end: 1491684607029 },
-  task: [
-    {
-      id: 0,
-      name: "Creation projet",
-      desc: "Creer le back",
-      start: 1491680626329,
-      end: 1491684607029,
-      percentageProgress: 75,
-      color: "#fc0202",
-      linkedTask: [],
-      ressources: []
+const gantt = {
+  nameService: "TuMeCherches_TuMeTrouves",
+  projects: [{
+    name: "Gantt",
+    desc: "Ce projet a pour but d'afficher un diagramme de Gantt",
+    daysOff: {
+      Mo: true,
+      Tu: true,
+      We: true,
+      Th: true,
+      Fr: true,
+      Sa: false,
+      Su: false
     },
-    {
-      id: 1,
-      name: "Affichage projet",
-      desc: "Creer le front",
-      start: 1491680627829,
-      end: 1491684608529,
-      percentageProgress: 50,
-      color: "#fc4545",
-      linkedTask: [],
-      ressources: []
-    }
-  ],
-  groupTask: [{ name: "Back", start: Date.now(), end: Date.now() }],
-  resources: [{ name: "Valentin", cost: 10, type: "humain" }],
-  milestones: [{ name: "Jalon1", date: Date.now() }]
-} ]
+    workingHours: { start: 1491680626329, end: 1491684607029 },
+    task: [
+      {
+        id: 0,
+        name: "Creation projet",
+        desc: "Creer le back",
+        start: 1491680626329,
+        end: 1491684607029,
+        percentageProgress: 75,
+        color: "#fc0202",
+        linkedTask: [],
+        ressources: []
+      },
+      {
+        id: 1,
+        name: "Affichage projet",
+        desc: "Creer le front",
+        start: 1491680627829,
+        end: 1491684608529,
+        percentageProgress: 50,
+        color: "#fc4545",
+        linkedTask: [],
+        ressources: []
+      }
+    ],
+    groupTask: [{ name: "Back", start: Date.now(), end: Date.now() }],
+    resources: [{ name: "Valentin", cost: 10, type: "humain" }],
+    milestones: [{ name: "Jalon1", date: Date.now() }]
+  }]
 };
 
 // const taskData = bdd["task"][0];
@@ -271,8 +272,8 @@ io.on("connection", client => {
       MongoClient.connect(url, function (err, db) {
         if (err) console.log("Erreur lors de la suppression");
         const taskData = bdd["task"][data];
-        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function(err, res){
-          if(err) console.log("Erreur lors de la suppression");
+        dbo.collection("TuMeCherches_TuMeTrouves").deleteOne({ "task": taskData }, function (err, res) {
+          if (err) console.log("Erreur lors de la suppression");
           console.log("Suppression efffectuée");
         })
       });
@@ -280,14 +281,14 @@ io.on("connection", client => {
 
     // Récupération des informations en bdd
     let MongoObjectID = require("mongodb").ObjectID;
-    let idToFind      = "5e1b5225dc1f86394c164521";
-    let objToFind     = { _id: new MongoObjectID(idToFind) };
+    let idToFind = "5e1b5225dc1f86394c164521";
+    let objToFind = { _id: new MongoObjectID(idToFind) };
 
-    dbo.collection("TuMeCherches_TuMeTrouves").findOne(objToFind, function(error, result) {
-        if (error) throw error;
-        console.log(result);
-        const envoieDonnees = {nameService : "TuMeCherches_TuMeTrouves", projects : [result]};   
-    });
+    // dbo.collection("TuMeCherches_TuMeTrouves").findOne(objToFind, function (error, result) {
+    //   if (error) throw error;
+    //   console.log(result);
+    //   gantt = { nameService: "TuMeCherches_TuMeTrouves", projects: [result] };
+    // });
 
     /*
     const envoieDonnees = 0;
@@ -312,10 +313,9 @@ io.on("connection", client => {
     clientProject.on('projectUpdated ', data => console.log(data));
     client.on('errorOnProjectUpdate', data => console.log(data));
 
-    clientProject.on('projectUpdated', dataProject =>
-    {
-      dataProject.forEach(element => { 
-        if(element.projects == []){console.log("Y'a que raphael pour faire ça")}
+    clientProject.on('projectUpdated', dataProject => {
+      dataProject.forEach(element => {
+        if (element.projects == []) { console.log("Y'a que raphael pour faire ça") }
         else {
           for (let i = 0; i < element.projects[0].task.length; i++) {
             io.emit(
@@ -323,13 +323,13 @@ io.on("connection", client => {
               element.projects[0].task[i].name +
               " : " +
               element.projects[0].task[i].desc +
-               ", " +
+              ", " +
               element.projects[0].task[i].start +
               " / " +
               element.projects[0].task[i].end +
               ", " +
               element.projects[0].task[i].percentageProgress
-             )
+            )
           }
         }
       });
