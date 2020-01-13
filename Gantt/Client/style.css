@@ -16,6 +16,7 @@
     border-radius: 50%;
     margin-top: 20px;
 }
+
 .btn-supp{
     border-radius: 50%;
     margin-left: 5%;
@@ -44,4 +45,7 @@
   }
 .Mod{        
     margin-top: 18px;
+}
+li{
+    list-style-type: none;
 }
